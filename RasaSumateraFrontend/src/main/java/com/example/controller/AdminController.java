@@ -48,6 +48,7 @@ public class AdminController {
         String nama = inputNamaKuliner.getText();
         String daerah = comboDaerah.getValue();
         String deskripsi = inputDeskripsi.getText();
+        String gambarUrl = "";
 
         // Validasi Sederhana
         if (nama.isEmpty() || daerah == null) {
@@ -58,7 +59,7 @@ public class AdminController {
         }
 
         // Tambah data ke list
-        listKuliner.add(new Kuliner(nama, daerah, deskripsi));
+        listKuliner.add(new Kuliner(nama, daerah, deskripsi, gambarUrl));
 
         // Reset Input
         inputNamaKuliner.clear();

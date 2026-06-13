@@ -206,7 +206,7 @@ public class RegisterController implements Initializable {
     private void goToLogin() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/view/Login.fxml"));
+                    getClass().getResource("/com/example/view/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) btnDaftar.getScene().getWindow();
             stage.setScene(new Scene(root));

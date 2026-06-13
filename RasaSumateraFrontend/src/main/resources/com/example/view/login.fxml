@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 
 <!--
-  Login.fxml — Kuliner Sumatera
+  login.fxml — Kuliner Sumatera
   Controller : com.example.controller.LoginController
   Ukuran     : 580 x 450
 -->

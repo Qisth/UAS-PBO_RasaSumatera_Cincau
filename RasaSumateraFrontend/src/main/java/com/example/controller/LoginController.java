@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 
 /**
  * LoginController — menangani logika halaman Login
- * FXML : Login.fxml
+ * FXML : login.fxml
  */
 public class LoginController implements Initializable {
 

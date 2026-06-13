@@ -1,36 +1,47 @@
 package com.example.model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Kuliner {
-    private String nama;
-    private String daerah;
-    private String deskripsi;
-    private String gambarUrl;
+    private Long id;
+    private Long daerahId;
 
-    public Kuliner() {}
+    private final StringProperty nama;
+    private final StringProperty daerah;
+    private final StringProperty deskripsi;
+    private final StringProperty gambarUrl;
 
-    public Kuliner(String nama, String daerah, String deskripsi) {
-        this.nama = nama;
-        this.daerah = daerah;
-        this.deskripsi = deskripsi;
-        this.gambarUrl = "";
-    }
-
+    // Constructor
     public Kuliner(String nama, String daerah, String deskripsi, String gambarUrl) {
-        this.nama = nama;
-        this.daerah = daerah;
-        this.deskripsi = deskripsi;
-        this.gambarUrl = gambarUrl;
+        this.nama = new SimpleStringProperty(nama);
+        this.daerah = new SimpleStringProperty(daerah);
+        this.deskripsi = new SimpleStringProperty(deskripsi);
+        this.gambarUrl = new SimpleStringProperty(gambarUrl);
     }
 
-    public String getNama() { return nama; }
-    public void setNama(String nama) { this.nama = nama; }
+    // Getter & Setter untuk id dan daerahId (data dari backend)
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getDaerah() { return daerah; }
-    public void setDaerah(String daerah) { this.daerah = daerah; }
+    public Long getDaerahId() { return daerahId; }
+    public void setDaerahId(Long daerahId) { this.daerahId = daerahId; }
 
-    public String getDeskripsi() { return deskripsi; }
-    public void setDeskripsi(String deskripsi) { this.deskripsi = deskripsi; }
+    // Getter untuk Property (Dibutuhkan oleh PropertyValueFactory JavaFX)
+    public StringProperty namaProperty() { return nama; }
+    public StringProperty daerahProperty() { return daerah; }
+    public StringProperty deskripsiProperty() { return deskripsi; }
+    public StringProperty gambarUrlProperty() { return gambarUrl; }
 
-    public String getGambarUrl() { return gambarUrl; }
-    public void setGambarUrl(String gambarUrl) { this.gambarUrl = gambarUrl; }
+    // Getter Standar
+    public String getNama() { return nama.get(); }
+    public String getDaerah() { return daerah.get(); }
+    public String getDeskripsi() { return deskripsi.get(); }
+    public String getGambarUrl() { return gambarUrl.get(); }
+
+    // Setter Standar
+    public void setNama(String value) { nama.set(value); }
+    public void setDaerah(String value) { daerah.set(value); }
+    public void setDeskripsi(String value) { deskripsi.set(value); }
+    public void setGambarUrl(String value) { gambarUrl.set(value); }
 }
