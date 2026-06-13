@@ -28,26 +28,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Menonaktifkan CSRF karena aplikasi diakses via REST API Client (JavaFX), bukan form HTML browser
                 .csrf(csrf -> csrf.disable())
-
-                // Mengubah manajemen session menjadi STATELESS (tidak menyimpan session di memori server)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // Mengatur hak akses route/endpoint URL
                 .authorizeHttpRequests(auth -> auth
-                        // Mengizinkan akses tanpa token untuk login dan register
+                        // 1. Jalur Utama Autentikasi & Console Database
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        // Mengizinkan konsol H2 database dibuka secara bebas selama masa pengembangan proyek
                         .requestMatchers("/h2-console/**").permitAll()
-                        // Endpoint di luar itu (seperti menambah ulasan) wajib membawa Token JWT
+
+                        // 2. Proteksi Fitur DAERAH (GET umum, sisanya ADMIN)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/daerah/**").permitAll()
+                        .requestMatchers("/api/v1/daerah/**").hasRole("ADMIN")
+
+                        // 3. Proteksi Fitur KULINER (GET umum, sisanya ADMIN)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/kuliner/**").permitAll()
+                        .requestMatchers("/api/v1/kuliner/**").hasRole("ADMIN")
+
+                        // 4. Proteksi Fitur ULASAN (GET umum, sisanya WAJIB LOGIN)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/ulasan/**").permitAll()
+                        .requestMatchers("/api/v1/ulasan/**").authenticated()
+
+                        // 5. Semua request lain yang tidak terdaftar wajib login
                         .anyRequest().authenticated()
                 );
 
-        // Mencegah proteksi X-Frame-Options memblokir tampilan halaman H2 Console di browser
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
-
-        // Menyisipkan filter JWT buatan kita sebelum filter bawaan Spring Security dijalankan
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -20,12 +20,26 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
+        // Skenario role sederhana: jika email ini yang login, set sebagai ADMIN
+        String role = email.equalsIgnoreCase("admin@rasasumatera.com") ? "ROLE_ADMIN" : "ROLE_USER";
+
         return Jwts.builder()
                 .setSubject(email)
-                .setIssuedAt(new Date())
+                .claim("role", role) // Menyimpan role di dalam payload JWT
+                .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(jwtSecret)
                 .compact();
+    }
+
+    // Membaca role saat filter dicegat
+    public String getRoleFromJWT(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(jwtSecret)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("role", String.class);
     }
 
     // Ekstraksi email kembali dari dalam token JWT

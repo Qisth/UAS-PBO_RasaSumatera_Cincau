@@ -27,10 +27,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String email = tokenProvider.getEmailFromJWT(jwt);
+                String role = tokenProvider.getRoleFromJWT(jwt);
+                org.springframework.security.core.authority.SimpleGrantedAuthority authority =
+                        new org.springframework.security.core.authority.SimpleGrantedAuthority(role);
 
-                // Set autentikasi ke dalam konteks Spring Security tanpa role rumit (stateless)
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        email, null, Collections.emptyList());
+                        email, null, Collections.singletonList(authority));
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
