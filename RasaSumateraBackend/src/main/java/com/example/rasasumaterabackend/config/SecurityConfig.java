@@ -31,22 +31,23 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Endpoint Autentikasi dibuka bebas
-                        .requestMatchers("/api/v1/v1/auth/**").permitAll()
+                        // 1. Jalur Utama Autentikasi & Console Database
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
-                        // 2. Hak Akses GET (Melihat Daerah, Kuliner, & Ulasan) dibuka untuk umum tanpa login
+                        // 2. Proteksi Fitur DAERAH (GET umum, sisanya ADMIN)
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/daerah/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/kuliner/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/ulasan/**").permitAll()
-
-                        // 3. Hak Akses MODIFIKASI (Tambah/Edit/Hapus Daerah & Kuliner) dikunci HANYA untuk Admin
                         .requestMatchers("/api/v1/daerah/**").hasRole("ADMIN")
+
+                        // 3. Proteksi Fitur KULINER (GET umum, sisanya ADMIN)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/kuliner/**").permitAll()
                         .requestMatchers("/api/v1/kuliner/**").hasRole("ADMIN")
 
-                        // 4. Hak Akses Tambah Ulasan diwajibkan LOGIN (Bisa Admin maupun User biasa)
+                        // 4. Proteksi Fitur ULASAN (GET umum, sisanya WAJIB LOGIN)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/ulasan/**").permitAll()
                         .requestMatchers("/api/v1/ulasan/**").authenticated()
 
+                        // 5. Semua request lain yang tidak terdaftar wajib login
                         .anyRequest().authenticated()
                 );
 

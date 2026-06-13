@@ -9,4 +9,6 @@ import java.util.List;
 public interface KulinerRepository extends JpaRepository<Kuliner, Long> {
     // Fitur pencarian kuliner berdasarkan nama untuk kolom pencarian JavaFX
     List<Kuliner> findByNamaContainingIgnoreCase(String nama);
+
+    List<Kuliner> findByDaerahId(Long daerahId);
 }

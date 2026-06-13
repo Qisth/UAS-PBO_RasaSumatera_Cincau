@@ -55,4 +55,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout() {
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Logout berhasil. Sesi Anda telah berakhir.");
+
+        return ResponseEntity.ok(response);
+    }
 }

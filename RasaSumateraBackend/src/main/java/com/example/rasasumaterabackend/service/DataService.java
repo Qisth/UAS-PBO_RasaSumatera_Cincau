@@ -30,6 +30,10 @@ public class DataService {
     // --- LOGIKA KULINER ---
     public List<Kuliner> getAllKuliner() { return kulinerRepository.findAll(); }
 
+    public Kuliner getKulinerById(Long id) { return kulinerRepository.findById(id).orElse(null); }
+
+    public List<Kuliner> getKulinerByDaerahId(Long daerahId) { return kulinerRepository.findByDaerahId(daerahId); }
+
     public List<Kuliner> searchKuliner(String query) {
         return kulinerRepository.findByNamaContainingIgnoreCase(query);
     }
