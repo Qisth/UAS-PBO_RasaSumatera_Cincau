@@ -1,73 +1,55 @@
 package com.example.rasasumaterabackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
+@Setter
 @Getter
 @Entity
 @Table(name = "ulasan")
-public class Ulasan {
+public class Ulasan extends BaseEntity {
 
-    // Getters & Setters
-    @Setter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // Encapsulation: Getter dan Setter
+    // Menghubungkan ke entitas User untuk mendapatkan data user (termasuk username)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Setter
-    @NotBlank(message = "Nama pengguna tidak boleh kosong")
-    @Size(max = 100, message = "Nama pengguna maksimal 100 karakter")
-    @Column(name = "nama_pengguna", nullable = false, length = 100)
-    private String namaPengguna;
-
-    @Setter
     @NotBlank(message = "Isi ulasan tidak boleh kosong")
-    @Size(min = 10, message = "Isi ulasan minimal 10 karakter")
-    @Column(name = "isi_ulasan", nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String isiUlasan;
 
-    @Setter
-    @Min(value = 1, message = "Rating minimal 1")
-    @Max(value = 5, message = "Rating maksimal 5")
+    @NotNull(message = "Rating wajib diisi")
+    @Min(value = 1, message = "Rating minimal bernilai 1")
+    @Max(value = 5, message = "Rating maksimal bernilai 5")
     @Column(nullable = false)
-    private int rating;
+    private Integer rating;
 
-    @Setter
+    // Menghubungkan ke Kuliner mana ulasan ini diberikan
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kuliner_id", nullable = false)
     private Kuliner kuliner;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    // Lifecycle Hooks
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // Constructor Kosong (wajib untuk JPA)
+    // Constructor Kosong
     public Ulasan() {}
 
-    // Constructor Lengkap
-    public Ulasan(String namaPengguna, String isiUlasan, int rating, Kuliner kuliner) {
-        this.namaPengguna = namaPengguna;
+    // Polymorphism: Overloading Constructor
+    public Ulasan(User user, String isiUlasan, Integer rating, Kuliner kuliner) {
+        this.user = user;
         this.isiUlasan = isiUlasan;
         this.rating = rating;
         this.kuliner = kuliner;
+    }
+
+    // Metode Tambahan untuk Memenuhi Request Khusus Anda:
+    // JavaFX bisa langsung memanggil getUsernamePengulas() untuk menampilkan nama pengulas
+    public String getUsernamePengulas() {
+        return this.user != null ? this.user.getUsername() : "Anonymous";
     }
 
 }

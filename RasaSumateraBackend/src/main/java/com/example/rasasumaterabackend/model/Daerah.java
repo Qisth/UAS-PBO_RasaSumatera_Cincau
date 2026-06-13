@@ -1,69 +1,35 @@
 package com.example.rasasumaterabackend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @Entity
 @Table(name = "daerah")
-public class Daerah {
+public class Daerah extends BaseEntity {
 
-    // Getters & Setters
-    @Setter
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Setter
+    // Encapsulation: Getter dan Setter
     @NotBlank(message = "Nama daerah tidak boleh kosong")
-    @Size(max = 100, message = "Nama daerah maksimal 100 karakter")
-    @Column(name = "nama_daerah", nullable = false, unique = true, length = 100)
-    private String namaDaerah;
+    @Column(nullable = false, unique = true)
+    private String nama;
 
-    @Setter
-    @NotBlank(message = "Deskripsi tidak boleh kosong")
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String deskripsi;
-
-    @Setter
-    @Column(name = "gambar_url")
-    private String gambarUrl;
-
-    @Setter
+    // Relasi One-to-Many ke Kuliner
+    // MappedBy merujuk ke nama properti 'daerah' yang ada di kelas Kuliner
     @OneToMany(mappedBy = "daerah", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Kuliner> kulinerList;
+    private List<Kuliner> daftarKuliner = new ArrayList<>();
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    // Lifecycle Hooks
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // Constructor Kosong (wajib untuk JPA)
+    // Constructor Kosong (Wajib JPA)
     public Daerah() {}
 
-    // Constructor Lengkap
-    public Daerah(String namaDaerah, String deskripsi, String gambarUrl) {
-        this.namaDaerah = namaDaerah;
-        this.deskripsi = deskripsi;
-        this.gambarUrl = gambarUrl;
+    // Polymorphism: Overloading Constructor
+    public Daerah(String nama) {
+        this.nama = nama;
     }
 
 }
