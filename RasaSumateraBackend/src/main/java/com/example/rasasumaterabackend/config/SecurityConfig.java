@@ -28,26 +28,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Menonaktifkan CSRF karena aplikasi diakses via REST API Client (JavaFX), bukan form HTML browser
                 .csrf(csrf -> csrf.disable())
-
-                // Mengubah manajemen session menjadi STATELESS (tidak menyimpan session di memori server)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // Mengatur hak akses route/endpoint URL
                 .authorizeHttpRequests(auth -> auth
-                        // Mengizinkan akses tanpa token untuk login dan register
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        // Mengizinkan konsol H2 database dibuka secara bebas selama masa pengembangan proyek
+                        // 1. Endpoint Autentikasi dibuka bebas
+                        .requestMatchers("/api/v1/v1/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        // Endpoint di luar itu (seperti menambah ulasan) wajib membawa Token JWT
+
+                        // 2. Hak Akses GET (Melihat Daerah, Kuliner, & Ulasan) dibuka untuk umum tanpa login
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/daerah/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/kuliner/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/ulasan/**").permitAll()
+
+                        // 3. Hak Akses MODIFIKASI (Tambah/Edit/Hapus Daerah & Kuliner) dikunci HANYA untuk Admin
+                        .requestMatchers("/api/v1/daerah/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/kuliner/**").hasRole("ADMIN")
+
+                        // 4. Hak Akses Tambah Ulasan diwajibkan LOGIN (Bisa Admin maupun User biasa)
+                        .requestMatchers("/api/v1/ulasan/**").authenticated()
+
                         .anyRequest().authenticated()
                 );
 
-        // Mencegah proteksi X-Frame-Options memblokir tampilan halaman H2 Console di browser
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
-
-        // Menyisipkan filter JWT buatan kita sebelum filter bawaan Spring Security dijalankan
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

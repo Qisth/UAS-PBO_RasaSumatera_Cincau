@@ -12,13 +12,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired
     private UserService userService;
 
-    // Endpoint register (POST http://localhost:8080/api/auth/register)
+    // Endpoint register (POST http://localhost:8080/api/v1/auth/register)
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody User user) {
         try {
@@ -37,7 +37,7 @@ public class AuthController {
         }
     }
 
-    // Endpoint login (POST http://localhost:8080/api/auth/login)
+    // Endpoint login (POST http://localhost:8080/api/v1/auth/login)
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
