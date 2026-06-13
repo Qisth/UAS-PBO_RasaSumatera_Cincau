@@ -1,144 +1,369 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="480.0" style="-fx-background-color: #FFF5F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.MainController">
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.controller.MainController"
+            prefWidth="1280"
+            prefHeight="800"
+            style="-fx-background-color:#FFF5F5;">
+
+    <!-- ================= NAVBAR ================= -->
+
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: #FFF5F5; -fx-border-color: #E6E6E6; -fx-border-width: 0 0 1 0;" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="Kulineranyuk!" textFill="#A32D2D">
-                    <font>
-                        <Font name="System Bold" />
-                    </font>
-                </Label>
-                <HBox alignment="CENTER_RIGHT" spacing="15.0" HBox.hgrow="ALWAYS">
-                    <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #A32D2D; -fx-font-weight: bold;" text="Beranda" />
-                        <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #555555;" text="Tentang" />
-                        <Button fx:id="btnLoginNav" mnemonicParsing="false" onAction="#handleNavLogin" style="-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;" text="Login" textFill="WHITE" />
-                    </children>
-                </HBox>
-            </children>
+        <HBox alignment="CENTER_LEFT"
+              prefHeight="70"
+              spacing="20"
+              style="-fx-background-color:#FFF5F5;
+                     -fx-border-color:#E8E8E8;
+                     -fx-border-width:0 0 1 0;">
+
             <padding>
-                <Insets left="20.0" right="20.0" />
+                <Insets top="10" right="30" bottom="10" left="30"/>
             </padding>
+
+            <Label text="Kulineranyuk!"
+                   style="-fx-font-size:24;
+                          -fx-font-weight:bold;
+                          -fx-text-fill:#A32D2D;"/>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Button text="Beranda"
+                    style="-fx-background-color:transparent;
+                           -fx-font-weight:bold;
+                           -fx-text-fill:#A32D2D;"/>
+
+            <Button text="Tentang"
+                    style="-fx-background-color:transparent;"/>
+
+            <Button fx:id="btnLoginNav"
+                    text="Login"
+                    onAction="#handleNavLogin"
+                    style="-fx-background-color:#A32D2D;
+                           -fx-text-fill:white;
+                           -fx-background-radius:20;"/>
         </HBox>
     </top>
 
+    <!-- ================= CONTENT ================= -->
+
     <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background-insets: 0;" vbarPolicy="AS_NEEDED" BorderPane.alignment="CENTER">
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER">
+
             <content>
-                <VBox spacing="20.0">
-                    <children>
 
-                        <AnchorPane prefHeight="240.0" style="-fx-background-color: #A32D2D;">
-                            <children>
-                                <Circle fx:id="circleHeroImg" fill="#FCEBEB" layoutX="110.0" layoutY="120.0" radius="85.0" stroke="#EF9F27" strokeWidth="3.0" />
-                                <Label layoutX="215.0" layoutY="65.0" text="Rendang" textFill="WHITE">
-                                    <font>
-                                        <Font name="System Bold" />
-                                    </font>
-                                </Label>
-                                <Label layoutX="215.0" layoutY="110.0" text="Makanan Khas&#10;Sumatera Barat" textFill="WHITE" wrapText="true">
-                                    <font>
-                                        <Font />
-                                    </font>
-                                </Label>
-                                <Label layoutX="215.0" layoutY="175.0" text="20 ulasan untuk makanan ini" textFill="#FAEEDA" />
-                            </children>
-                        </AnchorPane>
+                <VBox spacing="25">
 
-                        <VBox spacing="25.0" style="-fx-background-color: #FFF5F5;">
-                            <padding>
-                                <Insets left="15.0" right="15.0" bottom="30.0" />
-                            </padding>
-                            <children>
+                    <!-- HERO -->
 
-                                <VBox spacing="5.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15;">
-                                    <children>
-                                        <Label text="Jelajahi per daerah" textFill="#791F1F" style="-fx-font-weight: bold; -fx-font-size: 16;" />
-                                        <Label text="Pilih provinsi untuk melihat kuliner khasnya" textFill="#777777" />
-                                        <HBox spacing="10.0" style="-fx-margin-top: 10;">
-                                            <children>
-                                                <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FFF; -fx-border-color: #E6E6E6; -fx-border-radius: 8;" text="Aceh" />
-                                                <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FFF; -fx-border-color: #E6E6E6; -fx-border-radius: 8;" text="Sumut" />
-                                                <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FFF; -fx-border-color: #E6E6E6; -fx-border-radius: 8;" text="Sumbar" />
-                                                <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FFF; -fx-border-color: #E6E6E6; -fx-border-radius: 8;" text="..." />
-                                            </children>
-                                        </HBox>
-                                    </children>
+                    <AnchorPane fx:id="heroPane"
+                                prefHeight="350"
+                                style="-fx-background-color:#C8162E;">
+
+                        <children>
+
+                            <Circle layoutX="210"
+                                    layoutY="175"
+                                    radius="115"
+                                    fill="WHITE"
+                                    stroke="#F0B236"
+                                    strokeWidth="5"/>
+
+                            <ImageView fx:id="imgHero"
+                                       fitWidth="210"
+                                       fitHeight="210"
+                                       layoutX="105"
+                                       layoutY="70"
+                                       preserveRatio="true"/>
+
+                            <VBox fx:id="heroText"
+                                  layoutX="420"
+                                  layoutY="95"
+                                  spacing="8">
+
+                                <Label fx:id="lblNamaHero"
+                                       text="Rendang"
+                                       style="-fx-font-size:48;
+                                              -fx-font-weight:bold;
+                                              -fx-text-fill:white;"/>
+
+                                <Label text="Makanan Khas"
+                                       style="-fx-font-size:24;
+                                              -fx-text-fill:white;"/>
+
+                                <Label fx:id="lblProvinsiHero"
+                                       text="Sumatera Barat"
+                                       style="-fx-font-size:24;
+                                              -fx-text-fill:white;"/>
+
+                                <Label fx:id="lblJumlahUlasan"
+                                       text="20 ulasan untuk makanan ini"
+                                       style="-fx-font-size:16;
+                                              -fx-text-fill:#FAEEDA;
+                                              -fx-padding:15 0 0 0;"/>
+
+                            </VBox>
+
+                        </children>
+
+                    </AnchorPane>
+
+                    <!-- BODY -->
+
+                    <VBox spacing="25">
+
+                        <padding>
+                            <Insets top="0" right="30" bottom="30" left="30"/>
+                        </padding>
+
+                        <!-- JELAJAHI -->
+
+                        <VBox spacing="15"
+                              style="-fx-background-color:white;
+                                     -fx-padding:20;
+                                     -fx-background-radius:15;">
+
+                            <Label text="Jelajahi per daerah"
+                                   style="-fx-font-size:22;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:#791F1F;"/>
+
+                            <Label text="Pilih provinsi untuk melihat kuliner khasnya"/>
+
+                            <HBox fx:id="provinceSection"
+                                  spacing="15">
+
+                                <VBox prefWidth="180"
+                                      style="-fx-border-color:#E6E6E6;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;
+                                             -fx-border-radius:10;">
+
+                                    <ImageView fitWidth="160"
+                                               fitHeight="90"/>
+
+                                    <Label text="Aceh"/>
                                 </VBox>
 
-                                <VBox spacing="5.0">
-                                    <children>
-                                        <Label text="Kuliner Favorite" textFill="#791F1F" style="-fx-font-weight: bold; -fx-font-size: 16;" />
-                                        <Label text="Login untuk melihat detail lengkap &amp; memberikan ulasan" textFill="#777777" />
-                                        <HBox spacing="10.0" style="-fx-padding: 10 0;">
-                                            <children>
-                                                <VBox prefWidth="105.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E6E6E6; -fx-border-radius: 10; -fx-padding: 5;">
-                                                    <children>
-                                                        <AnchorPane prefHeight="70.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;" />
-                                                        <Label text="Mie Aceh" textFill="#791F1F" style="-fx-font-weight: bold;" />
-                                                        <Label text="📍 Aceh" textFill="#555555" />
-                                                        <Label text="2 Ulasan" textFill="#999999" />
-                                                    </children>
-                                                </VBox>
-                                                <VBox prefWidth="105.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E6E6E6; -fx-border-radius: 10; -fx-padding: 5;">
-                                                    <children>
-                                                        <AnchorPane prefHeight="70.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;" />
-                                                        <Label text="Rendang" textFill="#791F1F" style="-fx-font-weight: bold;" />
-                                                        <Label text="📍 Sumbar" textFill="#555555" />
-                                                        <Label text="2 Ulasan" textFill="#999999" />
-                                                    </children>
-                                                </VBox>
-                                                <VBox prefWidth="105.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E6E6E6; -fx-border-radius: 10; -fx-padding: 5;">
-                                                    <children>
-                                                        <AnchorPane prefHeight="70.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;" />
-                                                        <Label text="Bika Ambon" textFill="#791F1F" style="-fx-font-weight: bold;" />
-                                                        <Label text="📍 Sumut" textFill="#555555" />
-                                                        <Label text="2 Ulasan" textFill="#999999" />
-                                                    </children>
-                                                </VBox>
-                                            </children>
-                                        </HBox>
-                                    </children>
+                                <VBox prefWidth="180"
+                                      style="-fx-border-color:#E6E6E6;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;
+                                             -fx-border-radius:10;">
+
+                                    <ImageView fitWidth="160"
+                                               fitHeight="90"/>
+
+                                    <Label text="Sumatera Utara"/>
                                 </VBox>
 
-                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15;">
-                                    <children>
-                                        <Label text="Ulasan.." textFill="#A32D2D" style="-fx-font-weight: bold; -fx-font-size: 15;" />
-                                        <TextArea fx:id="inputUlasan" prefHeight="70.0" promptText="disini kita nulis ulasan kita" style="-fx-control-inner-background: #EAEAEA;" wrapText="true" />
-                                        <Button fx:id="btnKirimUlasan" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleKirimUlasan" style="-fx-background-color: #A32D2D;" text="Kirim Ulasan" textFill="WHITE" />
-                                    </children>
+                                <VBox prefWidth="180"
+                                      style="-fx-border-color:#E6E6E6;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;
+                                             -fx-border-radius:10;">
+
+                                    <ImageView fitWidth="160"
+                                               fitHeight="90"/>
+
+                                    <Label text="Sumatera Barat"/>
                                 </VBox>
 
-                            </children>
+                                <VBox prefWidth="180"
+                                      alignment="CENTER"
+                                      style="-fx-border-color:#E6E6E6;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;
+                                             -fx-border-radius:10;">
+
+                                    <Label text="..."/>
+                                    <Label text="Lainnya"/>
+                                </VBox>
+
+                            </HBox>
+
                         </VBox>
-                    </children>
+
+                        <!-- FAVORITE -->
+
+                        <VBox spacing="15"
+                              style="-fx-background-color:white;
+                                     -fx-padding:20;
+                                     -fx-background-radius:15;">
+
+                            <Label text="Kuliner Favorite"
+                                   style="-fx-font-size:22;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:#791F1F;"/>
+
+                            <Label text="Login untuk melihat detail lengkap &amp; memberikan ulasan"/>
+
+                            <FlowPane fx:id="foodSection"
+                                      hgap="15"
+                                      vgap="15"
+                                      prefWrapLength="1000">
+
+                                <VBox prefWidth="200"
+                                      spacing="5"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;">
+
+                                    <ImageView fitWidth="180"
+                                               fitHeight="120"/>
+
+                                    <Label text="Mie Aceh"
+                                           style="-fx-font-weight:bold;"/>
+
+                                    <Label text="📍 Aceh"/>
+                                    <Label text="7 Ulasan"/>
+                                </VBox>
+
+                                <VBox prefWidth="200"
+                                      spacing="5"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;">
+
+                                    <ImageView fitWidth="180"
+                                               fitHeight="120"/>
+
+                                    <Label text="Rendang"
+                                           style="-fx-font-weight:bold;"/>
+
+                                    <Label text="📍 Sumbar"/>
+                                    <Label text="5 Ulasan"/>
+                                </VBox>
+
+                                <VBox prefWidth="200"
+                                      spacing="5"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;">
+
+                                    <ImageView fitWidth="180"
+                                               fitHeight="120"/>
+
+                                    <Label text="Bika Ambon"
+                                           style="-fx-font-weight:bold;"/>
+
+                                    <Label text="📍 Sumut"/>
+                                    <Label text="1 Ulasan"/>
+                                </VBox>
+
+                                <VBox prefWidth="200"
+                                      spacing="5"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:10;
+                                             -fx-background-radius:10;">
+
+                                    <ImageView fitWidth="180"
+                                               fitHeight="120"/>
+
+                                    <Label text="Mie Gomak"
+                                           style="-fx-font-weight:bold;"/>
+
+                                    <Label text="📍 Sumut"/>
+                                    <Label text="2 Ulasan"/>
+                                </VBox>
+
+                            </FlowPane>
+
+                        </VBox>
+
+                        <!-- TESTIMONI -->
+
+                        <VBox fx:id="testimonialSection"
+                              spacing="15"
+                              style="-fx-background-color:white;
+                                     -fx-padding:20;
+                                     -fx-background-radius:15;">
+
+                            <Label text="Kata Mereka"
+                                   style="-fx-font-size:22;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:#791F1F;"/>
+
+                            <HBox spacing="20">
+
+                                <VBox prefWidth="300"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:15;
+                                             -fx-background-radius:10;">
+
+                                    <Label text="Makasih infonya..." wrapText="true"/>
+                                    <Label text="— Bagus, Medan"/>
+                                </VBox>
+
+                                <VBox prefWidth="300"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:15;
+                                             -fx-background-radius:10;">
+
+                                    <Label text="Tampilannya bagus dan mudah dipakai."
+                                           wrapText="true"/>
+
+                                    <Label text="— Budi, Padang"/>
+                                </VBox>
+
+                                <VBox prefWidth="300"
+                                      style="-fx-background-color:#FFF5F5;
+                                             -fx-padding:15;
+                                             -fx-background-radius:10;">
+
+                                    <Label text="Lengkap banget!"
+                                           wrapText="true"/>
+
+                                    <Label text="— Rina, Sumut"/>
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                        <!-- CTA -->
+
+                        <VBox alignment="CENTER"
+                              spacing="15"
+                              prefHeight="180"
+                              style="-fx-background-color:#A32D2D;
+                                     -fx-background-radius:15;">
+
+                            <Label text="Siap menjelajahi kuliner Sumatera?"
+                                   style="-fx-font-size:28;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:white;"/>
+
+                            <Label text="Daftar gratis dan mulai berikan ulasanmu sekarang"
+                                   style="-fx-text-fill:#FAEEDA;"/>
+
+                            <Button fx:id="btnDaftar"
+                                    text="Daftar Gratis"
+                                    style="-fx-background-color:white;
+                                           -fx-text-fill:#A32D2D;
+                                           -fx-font-weight:bold;
+                                           -fx-background-radius:25;"/>
+                        </VBox>
+
+                        <!-- FOOTER -->
+
+                        <Label text="© 2025 RasaSumatera — Menjaga warisan kuliner Nusantara"
+                               style="-fx-text-fill:#999999;"/>
+
+                    </VBox>
+
                 </VBox>
+
             </content>
+
         </ScrollPane>
     </center>
-    <bottom>
-        <HBox alignment="CENTER" prefHeight="40.0" style="-fx-background-color: #FFF5F5;" BorderPane.alignment="CENTER">
-            <children>
-                <Label text="© 2025 RasaSumatera — Menjaga warisan kuliner Nusantara" textFill="#777777">
-                    <font>
-                        <Font />
-                    </font>
-                </Label>
-            </children>
-        </HBox>
-    </bottom>
+
 </BorderPane>
