@@ -1,0 +1,55 @@
+# 1. Hasil Kompilasi & Build (Maven)
+# --------------------------------------------------------------------
+**/target/
+**.tag
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# 2. Database H2 (Sangat krusial agar data lokal tidak bocor/mengeberatin repo)
+# --------------------------------------------------------------------
+**/data/
+*.db
+*.mv.db
+*.trace.db
+
+# 3. Konfigurasi IDE (IntelliJ IDEA, Eclipse, NetBeans)
+# --------------------------------------------------------------------
+# Mengabaikan folder .idea di root maupun di dalam sub-folder project
+.idea/
+**/.idea/
+*.iws
+*.iml
+*.ipr
+/out/
+**/out/
+.metadata/
+bin/
+tmp/
+.classpath
+.project
+.settings/
+
+# 4. Log Files
+# --------------------------------------------------------------------
+*.log
+**/logs/
+
+# 5. Maven Wrapper (Opsional: hapus tanda # jika gamau nge-push berkas wrapper script)
+# --------------------------------------------------------------------
+.mvn/
+mvnw
+mvnw.cmd
+
+# 6. OS & System Files
+# --------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
