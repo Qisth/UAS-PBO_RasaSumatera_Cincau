@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.service.ApiService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -195,10 +196,27 @@ public class RegisterController implements Initializable {
         if (!validatePassword(pw))   return;
         if (!validatePassword2(pw2)) return;
 
-        // TODO: panggil ApiService.register(nama, email, pw)
-        System.out.println("Register: " + nama + " | " + email);
-        showAlert("Akun berhasil dibuat! Silakan masuk 🎉");
-        goToLogin();
+        try {
+            // Memanggil ApiService untuk menembak endpoint register backend
+            ApiService apiService = new ApiService();
+            boolean isSuccess = apiService.register(nama, email, pw);
+
+            if (isSuccess) {
+                showAlert("Akun berhasil dibuat! Silakan masuk 🎉");
+                goToLogin(); // Redirect ke halaman login jika sukses
+            } else {
+                showAlert("Registrasi gagal! Email/Username mungkin sudah terdaftar atau input tidak valid.");
+            }
+
+        } catch (java.net.ConnectException e) {
+            // Menangani kasus jika server Spring Boot belum dinyalakan/koneksi terputus
+            System.err.println("Koneksi Error: " + e.getMessage());
+            showAlert("Gagal terhubung ke server! Pastikan Backend Spring Boot sudah dijalankan.");
+        } catch (Exception e) {
+            // Menangani error umum lainnya
+            System.err.println("Error: " + e.getMessage());
+            showAlert("Terjadi kesalahan sistem saat melakukan registrasi.");
+        }
     }
 
     // ── Navigasi ────────────────────────────────────────────

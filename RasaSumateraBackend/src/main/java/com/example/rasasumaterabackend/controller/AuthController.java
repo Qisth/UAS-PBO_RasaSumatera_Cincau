@@ -2,6 +2,7 @@ package com.example.rasasumaterabackend.controller;
 
 import com.example.rasasumaterabackend.dto.LoginRequest;
 import com.example.rasasumaterabackend.model.User;
+import com.example.rasasumaterabackend.repository.UserRepository;
 import com.example.rasasumaterabackend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Endpoint register (POST http://localhost:8080/api/v1/auth/register)
     @PostMapping("/register")
@@ -42,11 +46,15 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             String token = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
+            String username = userRepository.findByEmail(loginRequest.getEmail())
+                    .map(User::getUsername) // Mengambil string username jika user ditemukan
+                    .orElseThrow(() -> new RuntimeException("User tidak ditemukan")); // Lempar error jika kosong
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Login sukses!");
             response.put("token", token);
             response.put("token_type", "Bearer");
+            response.put("username", username);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {

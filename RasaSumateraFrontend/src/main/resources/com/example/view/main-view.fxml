@@ -27,11 +27,19 @@
                         <Font name="System Bold" />
                     </font>
                 </Label>
+                <Label fx:id="lblUsername" textFill="#555555">
+                    <font>
+                        <Font name="System Italic" size="14.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="15.0" />
+                    </HBox.margin>
+                </Label>
                 <HBox alignment="CENTER_RIGHT" spacing="15.0" HBox.hgrow="ALWAYS">
                     <children>
                         <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #A32D2D; -fx-font-weight: bold;" text="Beranda" />
                         <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #555555;" text="Tentang" />
-                        <Button fx:id="btnLoginNav" mnemonicParsing="false" onAction="#handleNavLogin" style="-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;" text="Login" textFill="WHITE" />
+                        <Button fx:id="btnAuthNav" mnemonicParsing="false" onAction="#handleAuthAction" style="-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;" text="Login" textFill="WHITE" />
                     </children>
                 </HBox>
             </children>

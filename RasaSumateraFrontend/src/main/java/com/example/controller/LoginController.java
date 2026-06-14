@@ -1,8 +1,12 @@
 package com.example.controller;
 
+import com.example.service.ApiService;
+import com.example.util.SessionManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -88,7 +92,7 @@ public class LoginController implements Initializable {
 
     // ── Handle submit login ─────────────────────────────────
     @FXML
-    private void handleLoginSubmit() {
+    private void handleLoginSubmit(ActionEvent event) {
         String email    = inputEmail.getText().trim();
         String password = passwordVisible
                 ? inputPasswordVisible.getText()
@@ -100,11 +104,26 @@ public class LoginController implements Initializable {
             return;
         }
 
-        // TODO: panggil ApiService.login(email, password)
-        // Sementara simulasi sukses:
-        System.out.println("Login: " + email);
-        showAlert("Login berhasil! Selamat datang 🎉");
-        // navigateToMain();
+        try {
+            // Memanggil ApiService untuk melakukan request autentikasi ke backend
+            ApiService apiService = new ApiService();
+            boolean loginSukses = apiService.login(email, password);
+
+            if (loginSukses) {
+                System.out.println("Login Berhasil untuk: " + email);
+                showAlert("Login berhasil! Selamat datang " + SessionManager.getUsername() + " 🎉");
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.close();
+            }
+        } catch (RuntimeException e) {
+            // Menangkap error response dari backend (misal: "Email salah" atau "Password tidak sesuai")
+            showAlert(e.getMessage());
+        } catch (Exception e) {
+            // Menangkap error jika server Spring Boot tidak merespon/mati
+            System.err.println("Koneksi gagal: " + e.getMessage());
+            showAlert("Gagal terhubung ke server! Pastikan Backend Spring Boot sudah menyala.");
+        }
     }
 
     // ── Navigasi ke Register ────────────────────────────────
@@ -134,7 +153,7 @@ public class LoginController implements Initializable {
     private void navigateToMain() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/view/Main.fxml"));
+                    getClass().getResource("/com/example/view/main-view.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) btnMasuk.getScene().getWindow();
             stage.setScene(new Scene(root, 1100, 720));

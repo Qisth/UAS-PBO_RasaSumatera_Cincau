@@ -30,7 +30,7 @@
          PANEL KIRI — Merah + pattern makanan
          ═══════════════════════════════════════ -->
     <VBox prefWidth="220.0" prefHeight="450.0"
-          style="-fx-background-color: #C0392B; -fx-background-radius: 16 0 0 16;">
+          style="-fx-background-color: #C0392B;">
 
         <!-- Pattern ikon makanan (Grid 3x4) -->
         <GridPane style="-fx-padding: 0;" prefWidth="220.0" prefHeight="370.0"

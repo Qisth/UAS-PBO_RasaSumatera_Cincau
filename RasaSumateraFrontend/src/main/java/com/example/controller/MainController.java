@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.model.Daerah;
 import com.example.model.Kuliner;
 import com.example.service.ApiService;
+import com.example.util.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -25,7 +27,8 @@ import java.util.List;
 
 public class MainController {
 
-    @FXML private Button btnLoginNav;
+    @FXML private Label lblUsername;
+    @FXML private Button btnAuthNav;
     @FXML private Button btnKirimUlasan;
     @FXML private TextArea inputUlasan;
     @FXML private Circle circleHeroImg;
@@ -45,12 +48,49 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        // Tempat inisialisasi awal saat UI dirender
+        refreshUserInfo();
+    }
+
+    private void refreshUserInfo() {
+        if (SessionManager.getToken() != null &&
+                !SessionManager.getToken().isEmpty()) {
+
+            lblUsername.setText("Halo, " + SessionManager.getUsername() + "!");
+            btnAuthNav.setText("Logout");
+            btnAuthNav.setStyle(
+                    "-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;"
+            );
+
+        } else {
+
+            lblUsername.setText("");
+            btnAuthNav.setText("Login");
+            btnAuthNav.setStyle(
+                    "-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;"
+            );
+        }
     }
 
     @FXML
-    void handleNavLogin(ActionEvent event) {
+    void handleAuthAction(ActionEvent event) {
+        if (btnAuthNav.getText().equals("Logout")) {
+            // JALUR LOGOUT
 
+            // 1. Bersihkan token JWT dan username dari memory desktop
+            SessionManager.clearSession();
+
+            // 2. Segarkan/Refresh tampilan Navbar
+            refreshUserInfo();
+
+            // 3. Arahkan kembali ke halaman Beranda Utama atau Login form
+            System.out.println("User telah logout.");
+            goToLogin();
+        } else {
+            goToLogin();
+        }
+    }
+
+    void goToLogin() {
         try {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/view/login.fxml"));
@@ -61,6 +101,8 @@ public class MainController {
             loginStage.setScene(new Scene(loader.load()));
             loginStage.setResizable(false);
             loginStage.showAndWait();
+
+            refreshUserInfo();
 
         } catch (IOException e) {
 
@@ -120,7 +162,7 @@ public class MainController {
         if (source == cardMieAceh) {
             namaKuliner = "Mie Aceh";
         } else if (source == cardRendang) {
-            namaKuliner = "Rendang";
+            namaKuliner = "Rendang Daging";
         } else if (source == cardBikaAmbon) {
             namaKuliner = "Bika Ambon";
         } else {

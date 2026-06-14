@@ -29,7 +29,7 @@
          PANEL KIRI — sama dengan Login
          ═══════════════════════════════════════ -->
     <VBox prefWidth="220.0" prefHeight="500.0"
-          style="-fx-background-color: #C0392B; -fx-background-radius: 16 0 0 16;">
+          style="-fx-background-color: #C0392B;">
 
         <GridPane style="-fx-padding: 0;" prefWidth="220.0" prefHeight="420.0"
                   opacity="0.55">
@@ -107,9 +107,9 @@
             <VBox.margin><Insets bottom="16"/></VBox.margin>
         </HBox>
 
-        <!-- Field Nama Lengkap -->
+        <!-- Field Nama Pengguna/Username -->
         <VBox spacing="4.0">
-            <Label text="Nama lengkap" textFill="#555555"
+            <Label text="Nama pengguna" textFill="#555555"
                    style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
             <TextField fx:id="inputNama"
                        promptText="Budi Santoso"

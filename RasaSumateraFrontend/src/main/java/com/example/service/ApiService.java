@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.model.Daerah;
 import com.example.model.Kuliner;
+import com.example.util.SessionManager;
 
 import java.io.IOException;
 import java.net.URI;
@@ -86,6 +87,94 @@ public class ApiService {
             return response.body();
         } else {
             throw new IOException("Request gagal. Status: " + response.statusCode() + " - " + response.body());
+        }
+    }
+
+    public boolean register(String nama, String email, String password) throws Exception {
+        String endpoint = BASE_URL + "/auth/register";
+
+        // 1. Menyusun Request Body dalam format JSON manual (Atau bisa memakai library Jackson/Gson)
+        // Format payload disesuaikan dengan kebutuhan model di backend
+        String jsonPayload = String.format(
+                "{\"username\":\"%s\",\"email\":\"%s\",\"password\":\"%s\"}",
+                escapeJson(nama), escapeJson(email), escapeJson(password)
+        );
+
+        // 2. Membangun HTTP Request POST
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(endpoint))
+                .header("Content-Type", "application/json") // Memberitahu backend bahwa kita mengirim JSON
+                .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                .build();
+
+        // 3. Mengirim Request secara Synchronous dan menerima Response
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // 4. Mengecek Status Code dari Backend
+        // HTTP 201 Created menandakan entitas berhasil disimpan di DB H2 backend
+        if (response.statusCode() == 201) {
+            return true;
+        } else {
+            // Anda bisa mencetak response body jika ingin melakukan debugging alasan kegagalan dari backend
+            System.err.println("Register Gagal. Status: " + response.statusCode() + " | Response: " + response.body());
+            return false;
+        }
+    }
+
+    public boolean login(String email, String password) throws Exception {
+        // Abstraction: Menyusun payload JSON secara manual atau menggunakan library seperti Jackson/Gson
+        String jsonPayload = String.format("{\"email\":\"%s\",\"password\":\"%s\"}", email, password);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/auth/login"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                .build();
+
+        // Mengirim request secara synchronous
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            String responseBody = response.body();
+
+            // Ekstraksi Token & Username dari JSON Response
+            // Idealnya menggunakan library JSON parser (Jackson/Gson),
+            // berikut trik regex/string manipulation simpel standar lab:
+            String token = extractString(responseBody, "token");
+            String username = extractString(responseBody, "username");
+
+            // Simpan ke SessionManager jika berhasil
+            SessionManager.setSession(token, username);
+            return true;
+        } else {
+            // Jika backend mengirimkan pesan error validasi/keamanan
+            String errorMessage = extractObject(response.body(), "message");
+            if (errorMessage == null || errorMessage.isEmpty()) {
+                errorMessage = "Email atau Password salah!";
+            }
+            throw new RuntimeException(errorMessage);
+        }
+    }
+
+    public void logout() throws Exception {
+
+        String token = SessionManager.getToken();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/auth/logout"))
+                .header("Authorization", "Bearer " + token)
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(
+                request,
+                HttpResponse.BodyHandlers.ofString()
+        );
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(
+                    "Logout gagal. Status: " + response.statusCode()
+            );
         }
     }
 
@@ -190,6 +279,20 @@ public class ApiService {
             return Long.parseLong(matcher.group(1));
         }
         return null;
+    }
+
+    /**
+     * Helper Method untuk mencegah karakter ilegal merusak format string JSON (Escaping JSON)
+     */
+    private static String escapeJson(String value) {
+        if (value == null) return "";
+        return value.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 
     private String unescapeJson(String s) {
