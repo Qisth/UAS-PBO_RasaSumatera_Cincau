@@ -2,7 +2,10 @@ package com.example.service;
 
 import com.example.model.Daerah;
 import com.example.model.Kuliner;
+import com.example.model.UlasanResponse;
 import com.example.util.SessionManager;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
@@ -178,6 +181,60 @@ public class ApiService {
         }
     }
 
+    // Ulasan
+    public void kirimUlasan(Long kulinerId, String isiUlasan, int rating) throws Exception {
+
+        String token = SessionManager.getToken();
+
+        String json = String.format("""
+        {
+            "isiUlasan": "%s",
+            "rating": %d
+        }
+        """, isiUlasan.replace("\"", "\\\""), rating);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/ulasan?kulinerId=" + kulinerId))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(
+                request,
+                HttpResponse.BodyHandlers.ofString()
+        );
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(
+                    "Gagal mengirim ulasan: " + response.body()
+            );
+        }
+    }
+
+    public List<UlasanResponse> getUlasanByKuliner(Long kulinerId) throws Exception {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/ulasan?kulinerId=" + kulinerId))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(
+                request,
+                HttpResponse.BodyHandlers.ofString()
+        );
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException(
+                    "Gagal mengambil ulasan: " + response.body()
+            );
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        return mapper.readValue(response.body(), new TypeReference<List<UlasanResponse>>() {});
+    }
+
     // ==========================================
     // Helper Parsing JSON (manual, ringan, tanpa library eksternal)
     // ==========================================
@@ -284,7 +341,7 @@ public class ApiService {
     /**
      * Helper Method untuk mencegah karakter ilegal merusak format string JSON (Escaping JSON)
      */
-    private static String escapeJson(String value) {
+    private String escapeJson(String value) {
         if (value == null) return "";
         return value.replace("\\", "\\\\")
                 .replace("\"", "\\\"")

@@ -171,14 +171,6 @@
                                     </children>
                                 </VBox>
 
-                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15;">
-                                    <children>
-                                        <Label text="Ulasan.." textFill="#A32D2D" style="-fx-font-weight: bold; -fx-font-size: 15;" />
-                                        <TextArea fx:id="inputUlasan" prefHeight="70.0" promptText="disini kita nulis ulasan kita" style="-fx-control-inner-background: #EAEAEA;" wrapText="true" />
-                                        <Button fx:id="btnKirimUlasan" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleKirimUlasan" style="-fx-background-color: #A32D2D;" text="Kirim Ulasan" textFill="WHITE" />
-                                    </children>
-                                </VBox>
-
                             </children>
                         </VBox>
                     </children>

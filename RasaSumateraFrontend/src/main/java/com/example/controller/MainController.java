@@ -6,6 +6,7 @@ import com.example.service.ApiService;
 import com.example.util.SessionManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -52,8 +53,7 @@ public class MainController {
     }
 
     private void refreshUserInfo() {
-        if (SessionManager.getToken() != null &&
-                !SessionManager.getToken().isEmpty()) {
+        if (SessionManager.getToken() != null && !SessionManager.getToken().isEmpty()) {
 
             lblUsername.setText("Halo, " + SessionManager.getUsername() + "!");
             btnAuthNav.setText("Logout");
@@ -72,17 +72,13 @@ public class MainController {
     }
 
     @FXML
-    void handleAuthAction(ActionEvent event) {
+    void handleAuthAction() throws Exception {
         if (btnAuthNav.getText().equals("Logout")) {
             // JALUR LOGOUT
 
-            // 1. Bersihkan token JWT dan username dari memory desktop
+            apiService.logout();
             SessionManager.clearSession();
-
-            // 2. Segarkan/Refresh tampilan Navbar
             refreshUserInfo();
-
-            // 3. Arahkan kembali ke halaman Beranda Utama atau Login form
             System.out.println("User telah logout.");
             goToLogin();
         } else {
@@ -110,25 +106,6 @@ public class MainController {
         }
     }
 
-    // =========================
-    // ULASAN
-    // =========================
-
-    @FXML
-    void handleKirimUlasan(ActionEvent event) {
-        String ulasanText = inputUlasan.getText().trim();
-
-        // Implementasi Validasi input sesuai syarat nomor 6
-        if (ulasanText.isEmpty()) {
-            showAlert(AlertType.WARNING, "Validasi Gagal", "Ulasan tidak boleh kosong!");
-            return;
-        }
-
-        System.out.println("Mengirim ulasan ke service backend: " + ulasanText);
-        showAlert(AlertType.INFORMATION, "Sukses", "Ulasan kamu berhasil terkirim!");
-        inputUlasan.clear();
-    }
-
     /**
      * Dipanggil saat tombol daerah (Aceh, Sumut, Sumbar) diklik.
      * Akan membuka halaman Daftar Kuliner dengan filter daerah otomatis
@@ -139,7 +116,7 @@ public class MainController {
         Button source = (Button) event.getSource();
         String namaDaerah = source.getText();
 
-        openKulinerListWithFilter(namaDaerah);
+        openKulinerListWithFilter(namaDaerah, event);
     }
 
     /**
@@ -147,7 +124,7 @@ public class MainController {
      */
     @FXML
     void handleLihatSemuaKuliner(ActionEvent event) {
-        openKulinerList(null);
+        openKulinerList(null, event);
     }
 
     /**
@@ -169,14 +146,14 @@ public class MainController {
             return;
         }
 
-        openKulinerDetailByName(namaKuliner);
+        openKulinerDetailByName(namaKuliner, event);
     }
 
     /**
      * Mencari ID daerah berdasarkan nama, lalu membuka halaman Daftar Kuliner
      * dengan ComboBox filter daerah otomatis terisi sesuai daerah tersebut.
      */
-    private void openKulinerListWithFilter(String namaDaerah) {
+    private void openKulinerListWithFilter(String namaDaerah, ActionEvent event) {
         new Thread(() -> {
             try {
                 List<Daerah> listDaerah = apiService.getAllDaerah();
@@ -188,9 +165,9 @@ public class MainController {
                     }
                 }
                 final Daerah finalTarget = target;
-                Platform.runLater(() -> openKulinerList(finalTarget));
+                Platform.runLater(() -> openKulinerList(finalTarget, event));
             } catch (Exception e) {
-                Platform.runLater(() -> openKulinerList(null));
+                Platform.runLater(() -> openKulinerList(null, event));
             }
         }).start();
     }
@@ -199,7 +176,7 @@ public class MainController {
      * Membuka halaman Daftar Kuliner. Jika daerahAwal tidak null,
      * filter daerah pada halaman tersebut akan diatur otomatis.
      */
-    private void openKulinerList(Daerah daerahAwal) {
+    private void openKulinerList(Daerah daerahAwal, ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/view/kuliner-list-view.fxml"));
             Parent root = loader.load();
@@ -209,7 +186,7 @@ public class MainController {
                 controller.setDaerahAwal(daerahAwal);
             }
 
-            navigateTo(root);
+            navigateTo(root, event);
         } catch (IOException e) {
             showAlert(AlertType.ERROR, "Error", "Gagal membuka halaman Daftar Kuliner.");
         }
@@ -218,7 +195,7 @@ public class MainController {
     /**
      * Mencari kuliner berdasarkan nama, lalu membuka halaman profil/detailnya.
      */
-    private void openKulinerDetailByName(String nama) {
+    private void openKulinerDetailByName(String nama, Event event) {
         new Thread(() -> {
             try {
                 List<Kuliner> hasil = apiService.searchKuliner(nama);
@@ -228,7 +205,7 @@ public class MainController {
                 }
 
                 Long id = hasil.get(0).getId();
-                Platform.runLater(() -> openKulinerDetail(id));
+                Platform.runLater(() -> openKulinerDetail(id, event));
             } catch (Exception e) {
                 Platform.runLater(() -> showAlert(AlertType.ERROR, "Error", "Gagal memuat data kuliner. Pastikan server backend berjalan."));
             }
@@ -238,29 +215,34 @@ public class MainController {
     /**
      * Membuka halaman profil/detail kuliner berdasarkan ID.
      */
-    private void openKulinerDetail(Long id) {
+    private void openKulinerDetail(Long id, Event event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/view/kuliner-detail-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/view/kuliner-detail-view.fxml")
+            );
+
             Parent root = loader.load();
 
             KulinerDetailController controller = loader.getController();
             controller.setKulinerId(id);
 
-            navigateTo(root);
+            navigateTo(root, event); // atau node lain yang pasti ada
+
         } catch (IOException e) {
-            showAlert(AlertType.ERROR, "Error", "Gagal membuka halaman profil kuliner.");
+            showAlert(AlertType.ERROR,
+                    "Error",
+                    "Gagal membuka halaman profil kuliner.");
         }
     }
 
     /**
      * Mengganti isi Scene saat ini dengan halaman (root node) yang baru.
      */
-    private void navigateTo(Parent root) {
-        Node source = btnKirimUlasan;
+    private void navigateTo(Parent root, Event event) {
+        Node source = (Node) event.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
-        Scene scene = source.getScene();
+        Scene scene = stage.getScene();
         scene.setRoot(root);
-        stage.setScene(scene);
     }
 
     private void showAlert(AlertType type, String title, String content) {

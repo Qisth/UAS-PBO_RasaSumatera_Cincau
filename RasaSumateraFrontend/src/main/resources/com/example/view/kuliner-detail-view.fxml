@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -11,7 +12,8 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="480.0" style="-fx-background-color: #FFF5F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.KulinerDetailController">
+<?import javafx.scene.control.ComboBox?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="480.0" style="-fx-background-color: #FFF5F5;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.KulinerDetailController">
 
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: #FFF5F5; -fx-border-color: #E6E6E6; -fx-border-width: 0 0 1 0;" BorderPane.alignment="CENTER">
@@ -56,14 +58,28 @@
                                                 <Font name="System Bold" size="20.0" />
                                             </font>
                                         </Label>
-                                        <Label fx:id="lblDaerah" text="📍 Daerah" textFill="#A32D2D" style="-fx-font-weight: bold;" />
+                                        <Label fx:id="lblDaerah" style="-fx-font-weight: bold;" text="📍 Daerah" textFill="#A32D2D" />
                                     </children>
                                 </VBox>
 
                                 <VBox spacing="8.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 18;">
                                     <children>
-                                        <Label text="Deskripsi" textFill="#791F1F" style="-fx-font-weight: bold; -fx-font-size: 15;" />
+                                        <Label style="-fx-font-weight: bold; -fx-font-size: 15;" text="Deskripsi" textFill="#791F1F" />
                                         <Label fx:id="lblDeskripsi" text="Memuat deskripsi..." textFill="#555555" wrapText="true" />
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 15;">
+                                    <children>
+                                        <Label style="-fx-font-weight: bold; -fx-font-size: 15;" text="Ulasan" textFill="#791f1f" />
+                                        <TextArea fx:id="inputUlasan" prefHeight="70.0" promptText="Tulis ulasan di sini..." style="-fx-control-inner-background: #EAEAEA;" wrapText="true" />
+                                        <ComboBox fx:id="cmbRating" promptText="Pilih Rating" />
+                                        <Button fx:id="btnKirimUlasan" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleKirimUlasan" style="-fx-background-color: #A32D2D;" text="Kirim Ulasan" textFill="WHITE" />
+                                        <ScrollPane fitToWidth="true" prefHeight="250.0" style="-fx-background-color: transparent;">
+                                            <content>
+                                                <VBox fx:id="ulasanContainer" spacing="10.0" prefWidth="500.0"/>
+                                            </content>
+                                        </ScrollPane>
                                     </children>
                                 </VBox>
 
