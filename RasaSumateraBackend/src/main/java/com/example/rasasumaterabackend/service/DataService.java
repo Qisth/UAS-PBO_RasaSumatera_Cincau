@@ -44,4 +44,12 @@ public class DataService {
         kuliner.setDaerah(daerah);
         return kulinerRepository.save(kuliner);
     }
+
+    public void deleteKuliner(Long kulinerId) {
+        if (!kulinerRepository.existsById(kulinerId)) {
+            throw new RuntimeException("Kuliner tidak ditemukan");
+        }
+
+        kulinerRepository.deleteById(kulinerId);
+    }
 }

@@ -39,6 +39,7 @@
                     <children>
                         <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #A32D2D; -fx-font-weight: bold;" text="Beranda" />
                         <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #555555;" text="Tentang" />
+                        <Button fx:id="btnAdmin" mnemonicParsing="false" onAction="#handleAdminPage" style="-fx-background-color: transparent; -fx-text-fill: #555555;" text="Kelola Kuliner" visible="false" managed="false"/>
                         <Button fx:id="btnAuthNav" mnemonicParsing="false" onAction="#handleAuthAction" style="-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;" text="Login" textFill="WHITE" />
                     </children>
                 </HBox>

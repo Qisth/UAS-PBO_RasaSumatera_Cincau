@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.StatistikResponse;
 import com.example.model.Daerah;
 import com.example.model.Kuliner;
 import com.example.model.UlasanResponse;
@@ -29,6 +30,8 @@ public class ApiService {
     private static final String BASE_URL = "http://localhost:8080/api/v1";
 
     private final HttpClient client;
+
+    private final ObjectMapper objectMapper =  new ObjectMapper();
 
     public ApiService() {
         this.client = HttpClient.newHttpClient();
@@ -73,6 +76,86 @@ public class ApiService {
     public Kuliner getKulinerDetail(Long id) throws IOException, InterruptedException {
         String json = get("/kuliner/" + id);
         return parseKulinerDetail(json);
+    }
+
+    // Tambah daerah
+    public void addDaerah(String namaDaerah) throws IOException, InterruptedException {
+        String json = "{\"nama\":\"" + namaDaerah + "\"}";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(BASE_URL + "/daerah"))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(json))
+                        .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString()
+        );
+    }
+
+    public void addKuliner(Kuliner kuliner, Long daerahId)
+            throws IOException, InterruptedException {
+
+        String json =
+                objectMapper.writeValueAsString(kuliner);
+
+        HttpRequest request =
+                HttpRequest.newBuilder()
+                        .uri(
+                                URI.create(
+                                        BASE_URL +
+                                                "/kuliner?daerahId=" +
+                                                daerahId
+                                )
+                        )
+                        .header(
+                                "Authorization",
+                                "Bearer " + SessionManager.getToken()
+                        )
+                        .header(
+                                "Content-Type",
+                                "application/json"
+                        )
+                        .POST(
+                                HttpRequest.BodyPublishers.ofString(json)
+                        )
+                        .build();
+
+        HttpResponse<String> response =
+                client.send(
+                        request,
+                        HttpResponse.BodyHandlers.ofString()
+                );
+
+        if (response.statusCode() >= 400) {
+            throw new RuntimeException(
+                    "Gagal menambah kuliner: " +
+                            response.statusCode() +
+                            "\n" +
+                            response.body()
+            );
+        }
+    }
+
+    public void deleteKuliner(Long kulinerId) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/kuliner?kulinerId=" + kulinerId))
+                .header("Authorization", "Bearer " + SessionManager.getToken())
+                .DELETE()
+                .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public StatistikResponse getStatistik() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/statistik"))
+                .header("Authorization", "Bearer " + SessionManager.getToken())
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return objectMapper.readValue(response.body(), StatistikResponse.class);
     }
 
     // ==========================================
@@ -257,20 +340,10 @@ public class ApiService {
         String imageUrl = extractString(obj, "imageUrl");
 
         // namaDaerah bisa berada langsung (list/filter) atau di dalam objek nested "daerah" (detail)
-        String namaDaerah = extractString(obj, "namaDaerah");
         Long daerahId = extractLong(obj, "daerahId");
+        Daerah daerah = new Daerah(daerahId, extractString(obj, "namaDaerah"));
 
-        if (namaDaerah == null) {
-            String daerahObj = extractObject(obj, "daerah");
-            if (daerahObj != null) {
-                namaDaerah = extractString(daerahObj, "nama");
-                if (daerahId == null) {
-                    daerahId = extractLong(daerahObj, "id");
-                }
-            }
-        }
-
-        Kuliner k = new Kuliner(nama, namaDaerah == null ? "" : namaDaerah, deskripsi, imageUrl);
+        Kuliner k = new Kuliner(nama, daerah.toString(), deskripsi, imageUrl);
         k.setId(id);
         k.setDaerahId(daerahId);
         return k;

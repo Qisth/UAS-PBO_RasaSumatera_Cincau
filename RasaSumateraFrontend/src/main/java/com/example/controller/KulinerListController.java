@@ -200,7 +200,7 @@ public class KulinerListController {
         // 3. Memuat gambar secara aman dari resources internal JavaFX
         try {
             // Lokasi file berada di: src/main/resources/com/example/images/
-            String imagePath = "/com/example/images/" + kuliner.getGambarUrl();
+            String imagePath = "/com/example/images/" + kuliner.getimageUrl();
 
             var imageStream = getClass().getResourceAsStream(imagePath);
             if (imageStream != null) {

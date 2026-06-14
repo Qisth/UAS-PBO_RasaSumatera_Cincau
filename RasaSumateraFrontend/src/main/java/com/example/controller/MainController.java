@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -30,8 +29,7 @@ public class MainController {
 
     @FXML private Label lblUsername;
     @FXML private Button btnAuthNav;
-    @FXML private Button btnKirimUlasan;
-    @FXML private TextArea inputUlasan;
+    @FXML private Button btnAdmin;
     @FXML private Circle circleHeroImg;
 
     // Tombol filter daerah
@@ -60,6 +58,10 @@ public class MainController {
             btnAuthNav.setStyle(
                     "-fx-background-color: #A32D2D; -fx-background-radius: 20; -fx-padding: 6 18;"
             );
+            if (SessionManager.getUsername().equals("Admin")) {
+                btnAdmin.setVisible(true);
+                btnAdmin.setManaged(true);
+            }
 
         } else {
 
@@ -104,6 +106,28 @@ public class MainController {
 
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleAdminPage(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(
+                getClass().getResource("/com/example/view/admin-view.fxml")
+        );
+
+        Scene scene = new Scene(loader.load());
+        Stage adminStage = new Stage();
+        adminStage.initOwner(
+                ((Node) event.getSource())
+                        .getScene()
+                        .getWindow()
+        );
+
+        adminStage.setTitle("Kelola Kuliner");
+        adminStage.setScene(scene);
+
+        adminStage.initModality(Modality.APPLICATION_MODAL);
+        adminStage.showAndWait();
     }
 
     /**

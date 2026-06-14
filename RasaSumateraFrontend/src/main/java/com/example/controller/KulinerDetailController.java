@@ -73,7 +73,7 @@ public class KulinerDetailController {
 
                     try {
                         // Ambil nama file dari model kuliner (misal: "rendang.jpg")
-                        String namaFile = k.getGambarUrl();
+                        String namaFile = k.getimageUrl();
 
                         // Buat path lengkap menuju folder resources internal
                         String pathInternal = "/com/example/images/" + namaFile;

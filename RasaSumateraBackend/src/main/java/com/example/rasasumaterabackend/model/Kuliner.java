@@ -16,7 +16,6 @@ public class Kuliner extends BaseEntity {
     @Column(nullable = false)
     private String nama;
 
-    @NotBlank(message = "Deskripsi kuliner tidak boleh kosong")
     @Column(columnDefinition = "TEXT") // Agar muat teks deskripsi yang panjang di H2
     private String deskripsi;
 

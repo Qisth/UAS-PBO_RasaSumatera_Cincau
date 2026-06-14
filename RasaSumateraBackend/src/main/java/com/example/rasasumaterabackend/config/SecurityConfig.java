@@ -2,6 +2,7 @@ package com.example.rasasumaterabackend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,6 +28,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("SecurityConfig loaded");
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -36,15 +38,15 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
 
                         // 2. Proteksi Fitur DAERAH (GET umum, sisanya ADMIN)
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/daerah/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/daerah/**").permitAll()
                         .requestMatchers("/api/v1/daerah/**").hasRole("ADMIN")
 
                         // 3. Proteksi Fitur KULINER (GET umum, sisanya ADMIN)
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/kuliner/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/kuliner/**").permitAll()
                         .requestMatchers("/api/v1/kuliner/**").hasRole("ADMIN")
 
                         // 4. Proteksi Fitur ULASAN (GET umum, sisanya WAJIB LOGIN)
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/ulasan/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/ulasan/**").permitAll()
                         .requestMatchers("/api/v1/ulasan/**").authenticated()
 
                         // 5. Semua request lain yang tidak terdaftar wajib login

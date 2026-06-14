@@ -1,8 +1,10 @@
 package com.example.rasasumaterabackend.controller;
 
+import com.example.rasasumaterabackend.dto.StatistikResponse;
 import com.example.rasasumaterabackend.model.Daerah;
 import com.example.rasasumaterabackend.model.Kuliner;
 import com.example.rasasumaterabackend.service.DataService;
+import com.example.rasasumaterabackend.service.StatistikService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ public class ContentController {
 
     @Autowired
     private DataService dataService;
+
+    @Autowired
+    private StatistikService statistikService;
 
     // 1. GET ALL DAERAH (Bisa diakses umum tanpa login)
     @GetMapping("/daerah")
@@ -116,5 +121,18 @@ public class ContentController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+
+    // 7. DELETE KULINER
+    @DeleteMapping("/kuliner")
+    public ResponseEntity<Void> deleteKuliner(@RequestParam Long kulinerId) {
+        dataService.deleteKuliner(kulinerId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 8. GET STATISTIK
+    @GetMapping("/statistik")
+    public ResponseEntity<StatistikResponse> getStatistik() {
+        return ResponseEntity.ok(statistikService.getStatistik());
     }
 }
