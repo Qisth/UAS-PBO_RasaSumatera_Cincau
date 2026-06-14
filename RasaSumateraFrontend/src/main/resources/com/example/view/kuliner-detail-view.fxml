@@ -42,7 +42,7 @@
 
                         <AnchorPane prefHeight="220.0" style="-fx-background-color: #A32D2D;">
                             <children>
-                                <Circle fill="#FCEBEB" layoutX="240.0" layoutY="110.0" radius="80.0" stroke="#EF9F27" strokeWidth="3.0" />
+                                <Circle fx:id="circleGambar" fill="#FCEBEB" layoutX="240.0" layoutY="110.0" radius="80.0" stroke="#EF9F27" strokeWidth="3.0" />
                             </children>
                         </AnchorPane>
 

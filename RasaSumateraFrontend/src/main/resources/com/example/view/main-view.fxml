@@ -13,6 +13,11 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.paint.ImagePattern?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.shape.Rectangle?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="480.0" style="-fx-background-color: #FFF5F5;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.MainController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: #FFF5F5; -fx-border-color: #E6E6E6; -fx-border-width: 0 0 1 0;" BorderPane.alignment="CENTER">
@@ -44,7 +49,15 @@
 
                         <AnchorPane prefHeight="240.0" style="-fx-background-color: #A32D2D;">
                             <children>
-                                <Circle fx:id="circleHeroImg" fill="#FCEBEB" layoutX="110.0" layoutY="120.0" radius="85.0" stroke="#EF9F27" strokeWidth="3.0" />
+                                <Circle fx:id="circleHeroImg" layoutX="110.0" layoutY="120.0" radius="85.0" stroke="#EF9F27" strokeWidth="3.0">
+                                    <fill>
+                                        <ImagePattern>
+                                            <image>
+                                                <Image url="@../images/Rendang_Daging.JPG" />
+                                            </image>
+                                        </ImagePattern>
+                                    </fill>
+                                </Circle>
                                 <Label layoutX="215.0" layoutY="65.0" text="Rendang" textFill="WHITE">
                                     <font>
                                         <Font name="System Bold" />
@@ -88,23 +101,58 @@
                                             <children>
                                                 <VBox fx:id="cardMieAceh" onMouseClicked="#handleFavoriteCardClick" prefWidth="105.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E6E6E6; -fx-border-radius: 10; -fx-padding: 5; -fx-cursor: hand;">
                                                     <children>
-                                                        <AnchorPane prefHeight="70.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;" />
+                                                        <StackPane prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;">
+                                                            <children>
+                                                                <ImageView fx:id="imgMieAceh" fitHeight="75.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="false">
+                                                                    <image>
+                                                                        <Image url="@../images/Mie_Aceh.jpg" />
+                                                                    </image>
+                                                                    <clip>
+                                                                        <Rectangle width="95.0" height="75.0" arcWidth="16.0" arcHeight="16.0" />
+                                                                    </clip>
+                                                                </ImageView>
+                                                            </children>
+                                                        </StackPane>
                                                         <Label text="Mie Aceh" textFill="#791F1F" style="-fx-font-weight: bold;" />
                                                         <Label text="📍 Aceh" textFill="#555555" />
                                                         <Label text="2 Ulasan" textFill="#999999" />
                                                     </children>
                                                 </VBox>
+
                                                 <VBox fx:id="cardRendang" onMouseClicked="#handleFavoriteCardClick" prefWidth="105.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E6E6E6; -fx-border-radius: 10; -fx-padding: 5; -fx-cursor: hand;">
                                                     <children>
-                                                        <AnchorPane prefHeight="70.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;" />
-                                                        <Label text="Rendang" textFill="#791F1F" style="-fx-font-weight: bold;" />
+                                                        <StackPane prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;">
+                                                            <children>
+                                                                <ImageView fx:id="imgRendang" fitHeight="75.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="false">
+                                                                    <image>
+                                                                        <Image url="@../images/Rendang_Daging.JPG" />
+                                                                    </image>
+                                                                    <clip>
+                                                                        <Rectangle width="95.0" height="75.0" arcWidth="16.0" arcHeight="16.0" />
+                                                                    </clip>
+                                                                </ImageView>
+                                                            </children>
+                                                        </StackPane>
+                                                        <Label text="Rendang Daging" textFill="#791F1F" style="-fx-font-weight: bold;" />
                                                         <Label text="📍 Sumbar" textFill="#555555" />
                                                         <Label text="2 Ulasan" textFill="#999999" />
                                                     </children>
                                                 </VBox>
+
                                                 <VBox fx:id="cardBikaAmbon" onMouseClicked="#handleFavoriteCardClick" prefWidth="105.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #E6E6E6; -fx-border-radius: 10; -fx-padding: 5; -fx-cursor: hand;">
                                                     <children>
-                                                        <AnchorPane prefHeight="70.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;" />
+                                                        <StackPane prefHeight="75.0" prefWidth="95.0" style="-fx-background-color: #FCEBEB; -fx-background-radius: 8;">
+                                                            <children>
+                                                                <ImageView fx:id="imgBikaAmbon" fitHeight="75.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="false">
+                                                                    <image>
+                                                                        <Image url="@../images/Bika_Ambon.JPG" />
+                                                                    </image>
+                                                                    <clip>
+                                                                        <Rectangle width="95.0" height="75.0" arcWidth="16.0" arcHeight="16.0" />
+                                                                    </clip>
+                                                                </ImageView>
+                                                            </children>
+                                                        </StackPane>
                                                         <Label text="Bika Ambon" textFill="#791F1F" style="-fx-font-weight: bold;" />
                                                         <Label text="📍 Sumut" textFill="#555555" />
                                                         <Label text="2 Ulasan" textFill="#999999" />

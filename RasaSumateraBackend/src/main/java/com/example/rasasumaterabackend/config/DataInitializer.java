@@ -55,29 +55,29 @@ public class DataInitializer implements CommandLineRunner {
         Kuliner bikaAmbon = new Kuliner();
         bikaAmbon.setNama("Bika Ambon");
         bikaAmbon.setDeskripsi("Kue basah tradisional bertekstur rongga semut dengan rasa pandan-lemak yang legit.");
-        bikaAmbon.setImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Kue_bika_ambon.JPG/250px-Kue_bika_ambon.JPG"); // Contoh URL Gambar bebas
+        bikaAmbon.setImageUrl("Bika_Ambon.JPG");
         bikaAmbon.setDaerah(sumut); // Mengikat objek Daerah Sumut (Prinsip Relasi OOP/JPA)
         kulinerRepository.save(bikaAmbon);
 
         Kuliner sotoSumut = new Kuliner();
-        sotoSumut.setNama("Soto Sumut");
+        sotoSumut.setNama("Soto Medan");
         sotoSumut.setDeskripsi("Soto berkuah santan kental berwarna kuning jernih dengan cita rasa rempah jinten yang khas.");
-        sotoSumut.setImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Soto_sumut.jpg/330px-Soto_sumut.jpg");
+        sotoSumut.setImageUrl("Soto_Medan.jpg");
         sotoSumut.setDaerah(sumut);
         kulinerRepository.save(sotoSumut);
 
         // Kuliner untuk Daerah: Sumsel
         Kuliner pempek = new Kuliner();
-        pempek.setNama("Pempek Sumsel");
+        pempek.setNama("Pempek Palembang");
         pempek.setDeskripsi("Makanan olahan daging ikan dikombinasikan tepung sagu, disajikan bersama kuah cuko asam pedas manis.");
-        pempek.setImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Pempek_Kuah_Cuko.jpg/250px-Pempek_Kuah_Cuko.jpg");
+        pempek.setImageUrl("Pempek_Palembang.jpg");
         pempek.setDaerah(sumsel);
         kulinerRepository.save(pempek);
 
         Kuliner tekwan = new Kuliner();
         tekwan.setNama("Tekwan");
         tekwan.setDeskripsi("Sup bakso ikan khas Sumsel berkuah kaldu udang gurih, ditaburi jamur kuping dan soun.");
-        tekwan.setImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Tekwan.JPG/250px-Tekwan.JPG");
+        tekwan.setImageUrl("Tekwan.JPG");
         tekwan.setDaerah(sumsel);
         kulinerRepository.save(tekwan);
 
@@ -85,7 +85,7 @@ public class DataInitializer implements CommandLineRunner {
         Kuliner rendang = new Kuliner();
         rendang.setNama("Rendang Daging");
         rendang.setDeskripsi("Hidangan daging sapi kaya rempah yang dimasak perlahan dalam santan hingga kering berwarna cokelat gelap.");
-        rendang.setImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Rendang_daging_sapi_asli_Sumbar.JPG/250px-Rendang_daging_sapi_asli_Sumbar.JPG");
+        rendang.setImageUrl("Rendang_Daging.jpg");
         rendang.setDaerah(sumbar);
         kulinerRepository.save(rendang);
 

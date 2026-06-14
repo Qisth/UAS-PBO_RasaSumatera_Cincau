@@ -14,9 +14,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -171,18 +175,59 @@ public class KulinerListController {
         card.setPrefWidth(135.0);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #E6E6E6; -fx-border-radius: 12; -fx-padding: 8; -fx-cursor: hand;");
 
-        AnchorPane thumbnail = new AnchorPane();
-        thumbnail.setPrefHeight(80.0);
-        thumbnail.setStyle("-fx-background-color: #FCEBEB; -fx-background-radius: 8;");
+        // 1. Membuat Container StackPane sebagai pembungkus gambar agar posisi otomatis di tengah
+        StackPane thumbnailContainer = new StackPane();
+        thumbnailContainer.setPrefHeight(80.0);
+        thumbnailContainer.setPrefWidth(119.0); // Disesuaikan dengan lebar VBox setelah dikurangi padding
+        thumbnailContainer.setMinSize(119.0, 80.0); // Mengunci ukuran minimum agar kontainer tidak menyusut
+        thumbnailContainer.setMaxSize(119.0, 80.0); // Mengunci ukuran maksimum
+        thumbnailContainer.setStyle("-fx-background-color: #FCEBEB; -fx-background-radius: 8;");
 
+        // 2. Membuat objek ImageView untuk menampung gambar
+        ImageView imageView = new ImageView();
+        imageView.setPreserveRatio(false);
+        imageView.setPickOnBounds(true);
+        imageView.fitWidthProperty().bind(thumbnailContainer.widthProperty());
+        imageView.fitHeightProperty().bind(thumbnailContainer.heightProperty());
+
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(thumbnailContainer.widthProperty());
+        clip.heightProperty().bind(thumbnailContainer.heightProperty());
+        clip.setArcWidth(16);  // Mengikuti kelengkungan border-radius kontainer
+        clip.setArcHeight(16);
+        thumbnailContainer.setClip(clip);
+
+        // 3. Memuat gambar secara aman dari resources internal JavaFX
+        try {
+            // Lokasi file berada di: src/main/resources/com/example/images/
+            String imagePath = "/com/example/images/" + kuliner.getGambarUrl();
+
+            var imageStream = getClass().getResourceAsStream(imagePath);
+            if (imageStream != null) {
+                Image image = new Image(imageStream);
+                imageView.setImage(image);
+            } else {
+                // Jika file gambar spesifik tidak ditemukan, pakai gambar placeholder default
+                Image defaultImage = new Image(getClass().getResourceAsStream("/com/example/images/default-placeholder.jpg"));
+                imageView.setImage(defaultImage);
+            }
+        } catch (Exception e) {
+            System.err.println("Gagal memuat gambar untuk " + kuliner.getNama() + ": " + e.getMessage());
+        }
+
+        // 4. Masukkan ImageView ke dalam container pembungkusnya
+        thumbnailContainer.getChildren().add(imageView);
+
+        // 5. Membuat label teks kartu
         Label namaLabel = new Label(kuliner.getNama());
         namaLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #791F1F;");
         namaLabel.setWrapText(true);
 
-        Label daerahLabel = new Label("📍 " + kuliner.getDaerah());
+        Label daerahLabel = new Label("📍 " + (kuliner.getDaerah() != null ? kuliner.getDaerah() : "Tidak Diketahui"));
         daerahLabel.setStyle("-fx-text-fill: #555555;");
 
-        card.getChildren().addAll(thumbnail, namaLabel, daerahLabel);
+        // 6. Masukkan container gambar (StackPane) dan label ke dalam kartu utama (VBox)
+        card.getChildren().addAll(thumbnailContainer, namaLabel, daerahLabel);
 
         // Klik kartu -> buka halaman profil/detail kuliner
         card.setOnMouseClicked(event -> openDetail(kuliner));
